@@ -22,3 +22,5 @@ Medium article : [Mes conseils si je devais recommencer minishell](https://mediu
 Game : [Learn Git Branching](https://learngitbranching.js.org/.).
 
 Codequoi.com : [Difference entre terminal, console et shell](https://www.codequoi.com/difference-entre-terminal-console-et-shell/).
+
+Readme of Hqndler's minishell : [here](https://github.com/Hqndler/42-minishell).
