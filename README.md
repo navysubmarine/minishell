@@ -39,3 +39,5 @@ Codequoi.com : [Difference entre terminal, console et shell](https://www.codequo
 Readme of Hqndler's minishell : [here](https://github.com/Hqndler/42-minishell).
 
 University course (Indianapolis' Purdue University) : [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf).
+
+Youtube video [Omg, building a shell in 10 minutes ?](https://www.youtube.com/watch?v=k6TTj4C0LF0&list=PLGU1kcPKHMKj5yA0RPb5AK4QAhexmQwrW&index=3&pp=iAQB).
