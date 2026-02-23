@@ -1,5 +1,50 @@
 ### Utilisation des fonctions dans Minishell
 
+## readline()
+
+char *readline (const char *prompt);
+Lit la commande ecrit sur le terminal et la retourne, la string en argument est utilise comme un prompt.
+
+## rl_clear_history()
+
+void rl_clear_history(void);
+Efface l'historique remplit par readline.
+
+## rl_on_new_line()
+
+int rl_on_new_line(void);
+Dites aux routines de mise à jour que nous sommes passés à une nouvelle ligne (vide), généralement après la sortie d'une nouvelle ligne.
+
+## rl_replace_line()
+
+void rl_replace_line (const char *text, int clear_undo)
+Remplacez le contenu de rl_line_buffer par du texte. si Clear undo est different de 0, elle va annuler les actions ecrites precedament
+
+## rl_redisplay()
+
+int rl_redisplay(void)
+Modifiez ce qui est affiché à l'écran pour refléter le contenu actuel de rl_line_buffer.
+rl_line_buffer : La ligne assemblee.
+
+## add_history()
+
+void add_history(char *s);
+Elle enresgitre une chaine de charactere dnas une liste en memoire, utile pour retrouver les anciennes commande avec la fleche du haut.
+
+## getcwd()
+
+char *getcwd(char *buf, size_t size);
+copie le chemin du repertoire du process en cours dans buf de longueur size
+Exemple :
+    char *pwd = getcwd(NULL, 0); // il est possible de l'ecrire de cette maniere afin de laisserv la fonction alloer le nombre exacte d'octets. Mais il y a un risque de comportement indefini
+
+## chdir()
+
+int chdir(const char *path);
+change le chemin du repertoire du process en cours vers le chemin specifie par path
+Exemple :
+    chdir("/Users/gcamara/Documents/42/minishell");
+
 ## stat() & lstat() & fstat()
 
 int stat(const char *restrict pathname, struct stat *restrict statbuf);
@@ -7,7 +52,7 @@ int lstat(const char *restrict pathname, struct stat *restrict statbuf);
 int fstat(int fd, struct stat *statbuf);
 
 Ces fonctions servent a récuperer les informations d'un fichier.
-stat() répcupère l'état du pichier renseigné pointé par path et les écrits sur le tampon buff
+stat() récupère l'état du fichier renseigné pointé par path et les copie dans le tampon buff
 lstat() est pareil sauf que si path est un lien symbolique il donne l'état du lien plutot que du fichier
 fstat() est aussi pareil sauf qu'il pointe sur le descripteur de fichier
 
@@ -15,6 +60,7 @@ fstat() est aussi pareil sauf qu'il pointe sur le descripteur de fichier
 
 DIR *opendir(const char *name);
 
+creer une structure DIR.
 ouvre un flux répertoire conrespondant au répertoire name et renvoie un pointeur sur ce flux
 
 ## closedir()
