@@ -1,5 +1,76 @@
 ### Utilisation des fonctions dans Minishell
 
+## stat() & lstat() & fstat()
+
+int stat(const char *restrict pathname, struct stat *restrict statbuf);
+int lstat(const char *restrict pathname, struct stat *restrict statbuf);
+int fstat(int fd, struct stat *statbuf);
+
+Ces fonctions servent a récuperer les informations d'un fichier.
+stat() répcupère l'état du pichier renseigné pointé par path et les écrits sur le tampon buff
+lstat() est pareil sauf que si path est un lien symbolique il donne l'état du lien plutot que du fichier
+fstat() est aussi pareil sauf qu'il pointe sur le descripteur de fichier
+
+## opendir()
+
+DIR *opendir(const char *name);
+
+ouvre un flux répertoire conrespondant au répertoire name et renvoie un pointeur sur ce flux
+
+## closedir()
+
+int closedir(DIR *dirp);
+
+ferme le flux et libere la memoire
+
+## readdir()
+
+struct dirent *readdir(DIR *dirp);
+
+va lire l'entrée suivante des fichier contenu dans le flux rpertoire
+
+## isatty()
+
+Booléen adin de vérifier si le descripteur de fichier overt est connecté à un terminal.
+
+int isatty(int fd);
+
+## ttyname()
+
+si le descripteur de fichier est associé à un terminal, on renvoie le nom du terminal ou NULL
+Exemple : 
+
+    da=open("/dev/tty",O_RDWR);
+    db=open("/dev/ttyp2",O_RDWR);
+    a=ttyname(da);
+    printf(" %s",a);
+    b=ttyname(db);
+    printf(" %s,b); 
+
+## ttyslot()
+
+int ttyslot(void);
+renvoie la position de l'entrée du terminal en cours dans un fichier.
+
+
+## ioctl()
+
+int ioctl(int fd, unsigned long request, ...);
+input-output control, est un appel systeme spécifique pour des opéraions entrée sortie spécifique à un périférique qui ne peuvent pas etre executée par un appel systeme classique. Elle modifie le comportement des périphérique caché dans des fichiers spéciaux comme le tty
+
+Liste des requetes :
+https://linux.die.net/man/2/ioctl_list
+
+## getenv()
+
+char *getenv(const char *name);
+cete fonction cherche dans les variables d'enviornemnt name et return la string ou NULL si rien trouvé
+idéale pour chercher le PATH pour la fonction execve ou avoir des informaion sur tnn terminal.
+
+Exemple : 
+    getenv("PATH");
+
+
 ## tcsetattr()
 
 int tcsetattr(int fildes, int optional_actions, const struct *termios_p);
