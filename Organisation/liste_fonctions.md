@@ -29,11 +29,13 @@ struct dirent *readdir(DIR *dirp);
 
 va lire l'entrée suivante des fichier contenu dans le flux rpertoire
 
-## isatty()
+## int isatty(int fd);
 
-Booléen adin de vérifier si le descripteur de fichier overt est connecté à un terminal.
+Booléen adin de vérifier si le descripteur de fichier ouvert est connecté à un terminal (= si 1 = interactive shell mode).
 
-int isatty(int fd);
+interactive mode = we are able to give it
+input, and it will execute commands. non-interactive mode =
+you cannot give it input, it executes commands from a script.
 
 ## ttyname()
 
@@ -133,7 +135,7 @@ Exemple :
     int column_count = tgetnum("co");
     int line_count = tgetnum("li");
 
-char *tgetstr(char *id, char **area);
+# char *tgetstr(char *id, char **area);
 Permet de recuperer des commandes de la bibliothèque termcap sous forme de sequence d'echappement.
 
 Une sequence d'echappement est une seaquence de quelques octects (des chars), qui permet d'appliquer une action specifique a un ternimal.
@@ -141,14 +143,20 @@ Une sequence d'echappement est une seaquence de quelques octects (des chars), qu
 Exemple :
     char *cl_cap = tgetstr("cl", NULL);
 
-char *tgoto(const char *cap, int col, int row);
+# char *tgoto(const char *cap, int col, int row);
 
 cette fonction va generer la commande termcap renseigne dans le terminal. Le premier arguement la commande termcap, les deux derniers la ligne et le colonne ou elle sera genere.
 
-int tputs(const char *str, int affcnt, int (*putc)(int));
+# int tputs(const char *str, int affcnt, int (*putc)(int));
 
 cette fonction va executer la commande termcap recupere par la fonction tgetstr(). Le premier arguement la commande termcap, la deuxieme le nombre de lignes dans le terminal affecte, et la troisieme une fonction pour afficher le resultat.
     
 Exemple :
     char *cl_cap = tgetstr("cl", NULL);
     tputs (cl_cap, 1, ft_putchar);
+
+# getcwd(char *buf, size_t size)
+
+The  getcwd()  function copies an absolute pathname of the current working directory to the array pointed  to by buf, which is of length size.
+
+If  the length of the absolute pathname of the current working  directory,  including  the  terminating  null byte,  exceeds size bytes, NULL is returned, and errno is set to ERANGE; an application should check for this error, and allocate a larger buffer if necessary.
