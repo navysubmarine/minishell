@@ -31,6 +31,8 @@ Medium :  [overview of the working of the bash shell](https://medium.com/geekcul
 
 Notion : [minishell : quelques vieilles astuces de grand mere](https://www.notion.so/minishell-quelques-vieilles-astuces-de-grand-m-re-2fe0b3dc40f280c88099cb289a9210c3?source=copy_linkGame). 
 
+Medium : [Guide to code a simple shell in C](https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd).
+
 Codequoi.com : [Difference entre terminal, console et shell](https://www.codequoi.com/difference-entre-terminal-console-et-shell/).
 
 Readme of Hqndler's minishell : [here](https://github.com/Hqndler/42-minishell).
