@@ -4,9 +4,7 @@
 
 # ⋆˚✰ ݁˖⭑. Description *⋆˚✰ ݁˖⭑.
 
-A shell program is an application that allows interacting with the computer. In a shell the user can run programs and also redirect the input to come from a file and output to come from a file. Shells also provide programming constructions such as if, for, while, functions, variables etc. Additionally, shell programs offer features such as line editing, history, file completion, wildcards, environment variable expansion, and programing constructions. The most popular shell program currently is bash. 
-
-In addition to commandline shells, there are also Graphical Shells such as the Windows Desktop, MacOS Finder, or Linux Gnome and KDE that simplify the use of computers for most of the users. However, these graphical shells are not substitute to command line shells for power users who want to execute complex sequences of commands repeatedly or with parameters not available in the friendly, but limited graphical dialogs and controls.
+A shell is a program that acts as an interface between the user and the operating system. A shell allows the user to interact with the operating system by accepting commands entered by the user from the keyboard, verifying if the inputs from the user are correct and executing them. Generally, a shell is a user interface that allows us to use computer resources such as memory. It can take two forms command-line interface such as Bash or graphical user interface such as Windows Office.However, these graphical shells are not substitute to command line shells for power users who want to execute complex sequences of commands repeatedly or with parameters not available in the friendly, but limited graphical dialogs and controls.
 
 
 # *⋆˚✰ ݁˖⭑. Instructions *⋆˚✰ ݁˖⭑.
