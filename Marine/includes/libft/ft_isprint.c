@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/08 16:56:56 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/13 09:47:34 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+int	ft_isprint(int c)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
-
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
-	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
-	}
-	// shell is running in non interactive mode
+	if (c >= ' ' && c <= '~')
+		return (1);
 	else
-	{
-		// execute commands from script
-	}
+		return (0);
 }
+/*
+int	main()
+{
+	int i;
+
+	i = '7';
+	printf("%d", isprint(i));
+	printf("%d", ft_isprint(i));
+	return(0);
+}
+*/

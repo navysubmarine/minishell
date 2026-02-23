@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/15 16:43:41 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/15 16:45:14 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	ft_putstr_fd(char *s, int fd)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	int	i;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	i = 0;
+	while (s[i] != '\0')
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
+		i++;
 	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	write(fd, s, i);
 }

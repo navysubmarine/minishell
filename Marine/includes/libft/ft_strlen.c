@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/08 18:26:59 by marthoma          #+#    #+#             */
+/*   Updated: 2026/02/09 18:47:39 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+size_t	ft_strlen(const char *s)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	unsigned long	i;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	i = 0;
+	while (s[i] != '\0')
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
+		i++;
 	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	return (i);
 }
+/*
+int main()
+{
+    const char	*s;
+	
+	s = "coucou";
+    printf("%zu", ft_strlen(s));
+    printf("%zu", strlen(s));
+    return(0);
+}
+*/

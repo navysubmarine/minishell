@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/12 18:12:07 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/12 18:36:22 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strdup(const char *s)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	int		i;
+	char	*new;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	i = 0;
+	new = malloc(sizeof(*new) * (ft_strlen(s) + 1));
+	if (new == NULL)
+		return (NULL);
+	while (s[i])
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
+		new[i] = s[i];
+		i++;
 	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	new[i] = '\0';
+	return (new);
 }
+/*
+int main ()
+{
+	char *ptr;
+	char str[]="bonjour";
+	ptr = ft_strdup(str);
+	printf("%s", str);
+	printf("%s", ptr);
+	free(ptr);	
+}
+*/

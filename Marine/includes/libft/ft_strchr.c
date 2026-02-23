@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/10 17:11:11 by marthoma          #+#    #+#             */
+/*   Updated: 2026/02/03 12:08:05 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strchr(const char *s, int c)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	int	i;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
-	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
-	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	i = 0;
+	while (s[i] && s[i] != (char)c)
+		i++;
+	if (s[i] == (char)c)
+		return ((char *)(s + i));
+	return (0);
 }
+/*
+int main()
+{
+	const char *s;
+	int	c;
+
+	s ="bonjour \x88 petit crustace";
+	c = 'p';
+
+	printf("%s\n", ft_strchr(s, '\x88'));
+	printf("%s\n", strchr(s, '\x88'));
+	printf("%s\n", strrchr(s, c + 256));
+	return (0);
+}
+*/

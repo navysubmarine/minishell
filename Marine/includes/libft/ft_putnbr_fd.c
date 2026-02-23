@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/15 16:52:33 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/15 17:04:33 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	ft_putnbr_fd(int n, int fd)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	int long	i;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	if (n == -2147483648)
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
+		write (fd, "-2147483648", 11);
+		return ;
 	}
-	// shell is running in non interactive mode
-	else
+	i = n;
+	if (i < 0)
 	{
-		// execute commands from script
+		write(fd, "-", 1);
+		i = -i;
 	}
+	if (i > 9)
+	{
+		ft_putnbr_fd((i / 10), fd);
+		ft_putchar_fd(((i % 10) + '0'), fd);
+	}
+	if (i < 10)
+		ft_putchar_fd((i + '0'), fd);
 }

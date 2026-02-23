@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/19 14:02:25 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/21 18:17:12 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int argc, char **argv)
+#include "libft.h"
+/*
+static void	weird_tolower(unsigned int i, char *s)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+		if (s[i] >= 'A' && s[i] <= 'Z')
+		{
+			s[i] = s[i] + 32;
+		}
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+}
+*/
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+{
+	unsigned int	i;
+
+	i = 0;
+	while (s[i])
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
-	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
+		f(i, &(s[i]));
+		i++;
 	}
 }
+/*
+int	main()
+{
+	char	s[]={'C', 'o', 'C', '0', 'u', '\0'};
+
+	printf("old : %s\n", s);
+	ft_striteri(s, weird_tolower);
+	printf("new : %s", s);
+}
+*/

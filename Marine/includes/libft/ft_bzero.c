@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/11/10 09:57:19 by marthoma          #+#    #+#             */
+/*   Updated: 2025/11/10 11:22:49 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	ft_bzero(void *s, size_t n)
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	unsigned long	i;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	(void) n;
+	i = 0;
+	while (n > i)
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
-	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
+		(((char *)s)[i]) = '\0';
+		i++;
 	}
 }
+/*
+int	main()
+{
+ 	char str[] = "coucou";
+	
+    ft_bzero(str, 3);
+//  printf("%s", str);
+    return (0);
+//	printf("%c", (((char*)s)[i+1]));
+}
+*/

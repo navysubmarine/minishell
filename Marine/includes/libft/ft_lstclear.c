@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/23 16:19:00 by marthoma         ###   ########.fr       */
+/*   Created: 2025/12/14 18:07:37 by marthoma          #+#    #+#             */
+/*   Updated: 2026/01/22 14:16:41 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int	main(int argc, char **argv)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	// the current directory
-	char cwd[1024];
-	char *input;
+	t_list	*temp;
 
-	input = argv[1];
-	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+	if (!lst)
+		return ;
+	while (*lst)
 	{
-		getcwd(cwd, sizeof(cwd));
-		
-		// accept input from user and execute commands
+		temp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = temp;
 	}
-	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	free(*lst);
+	*lst = NULL;
 }
