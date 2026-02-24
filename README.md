@@ -38,6 +38,8 @@ Readme of Hqndler's minishell : [here](https://github.com/Hqndler/42-minishell).
 
 University course (Indianapolis' Purdue University) : [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf).
 
+Youtube video : [Let's build a super simple shell in C by Oceano](https://www.youtube.com/watch?v=yTR00r8vBH8).
+
 Youtube video [Omg, building a shell in 10 minutes ?](https://www.youtube.com/watch?v=k6TTj4C0LF0&list=PLGU1kcPKHMKj5yA0RPb5AK4QAhexmQwrW&index=3&pp=iAQB).
 
 # Git & organization
