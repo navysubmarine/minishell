@@ -1,1 +1,8 @@
+1) Creer un programme qui affiche un prompt et prend une ligne de commande
+2) Se familiariser avec les fonctions readline (rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay, add_history)
+3) PARSER LA LIGNE DE COMMANDE :
+    1) Creer la liste de tous les tokens possibles
+    2) Identifier le type de chaque token (infile, outfile, commande, option ou operateur (comme pipe))
+4) Executer la commande associee au token
+
 - Faire un fichier supp avec Valgrind

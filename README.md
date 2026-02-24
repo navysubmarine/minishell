@@ -22,6 +22,8 @@ Another one (probably the most exaustive one - 800 tests pour minishell) : [here
 
 ## General 
 
+Avant qu'il ne disparaisse.. [gitbook fonctions](https://42-cursus.gitbook.io/guide/3-rank-03/minishell/functions).
+
 Medium : [Guide to code a simple shell in C](https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd).
 
 Medium article : [Mes conseils si je devais recommencer minishell](https://medium.com/@mostafa.omrane/mes-conseils-si-je-devais-recommencer-minishell-a9783c51ba1b).
