@@ -46,7 +46,7 @@ Youtube video [Omg, building a shell in 10 minutes ?](https://www.youtube.com/wa
 
 Game on git : [Learn Git Branching](https://learngitbranching.js.org/.).
 
-Git for colla
+Git for collaborative work : [Structurez la collaboration grace a Gitflow](https://openclassrooms.com/en/courses/7688581-devenez-un-expert-de-git-et-github/7851612-structurez-la-collaboration-grace-a-gitflow).
 
 # Environment variables
 
