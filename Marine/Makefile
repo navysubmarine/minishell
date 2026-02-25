@@ -2,11 +2,14 @@ CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -g3
 NAME    = minishell
 
-INCLUDE_DIRS = -Iincludes -Ift_printf/includes -Ilibft/includes -Imlx_linux/minilibx-linux
+INCLUDE_DIRS = -Iincludes -Iincludes/ft_printf -Iincludes/libft
 
-SOURCES = main.c 
+SOURCES = minishell.c 
 
 OBJETS  = $(SOURCES:.c=.o)
+
+FTPRINTF_DIR = includes/ft_printf
+LIBFT_DIR    = includes/libft
 
 FTPRINTF = includes/ft_printf/libftprintf.a
 LIBFT    = includes/libft/libft.a
@@ -17,29 +20,30 @@ all: $(NAME)
 
 $(NAME): $(OBJETS) $(FTPRINTF) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJETS) \
-	-Llibft -lft \
-	-Lft_printf -lftprintf \
+	-L$(FTPRINTF_DIR) -lftprintf \
+	-L$(LIBFT_DIR) -lft \
+	-lreadline \
 	-o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
 
 $(FTPRINTF):
-	@$(MAKE) -C ft_printf
+	@$(MAKE) -C $(FTPRINTF_DIR)
 
 $(LIBFT):
-	@$(MAKE) -C libft
+	@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-	@$(MAKE) clean -C ft_printf
-	@$(MAKE) clean -C libft
+	@$(MAKE) clean -C $(FTPRINTF_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 	rm -f $(OBJETS)
 
 good: all clean
 
 fclean: clean
-	@$(MAKE) fclean -C ft_printf
-	@$(MAKE) fclean -C libft
+	@$(MAKE) fclean -C $(FTPRINTF_DIR)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
 	rm -f $(NAME)
 
 re: fclean all
