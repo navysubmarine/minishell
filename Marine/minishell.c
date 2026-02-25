@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/25 11:43:32 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/02/25 15:22:18 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,27 @@ int	main(void)
 {
 	char cwd[1024];
 	char *rl;
+	int i = 0;
 
 	// shell is running in interactive mode
-	if (isatty(STDIN_FILENO))
+//	if (isatty(STDIN_FILENO))
+	while (i < 10)
 	{
 		// accept input from user and execute commands
 		getcwd(cwd, sizeof(cwd));
 		rl = readline(cwd);
 		ft_printf("%s\n", rl);
+		ft_echo(rl);
+		rl_clear_history();
+		i++;
 	}
+	
 	// shell is running in non interactive mode
-	else
-	{
-		// execute commands from script
-	}
+	// else
+	// {
+	// 	// execute commands from script
+		
+	// }
+
 	return (0);
 }
