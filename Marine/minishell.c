@@ -14,43 +14,50 @@
 
 int	main(void)
 {
-	char cwd[1024];
-	char *rl;
-	int i = 0;
+	char	*cwd;
+	char	*rl;
+	t_token	*tokens;
+	int		i;
 
-	// shell is running in interactive mode
-//	if (isatty(STDIN_FILENO))
+	i = 0;
 	while (i < 10)
 	{
-		// accept input from user and execute commands
-		getcwd(cwd, sizeof(cwd));
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+		{
+			ft_printf("Error: getcwd failed\n");
+			return (1);
+		}
 		rl = readline(cwd);
-		tokenize(rl);
-		//ft_printf("%s\n", rl);
-		//ft_echo(rl);
+		free(cwd);
+		if (!rl)
+		{
+			ft_printf("Error : readline failed\n");
+			return (1);
+		}
+		tokens = tokenize(rl);
+		if (tokens)
+		{
+			ft_printf("Tokens:\n");
+			token_print(tokens);
+			token_clear(&tokens);
+		}
+		free(rl);
 		rl_clear_history();
 		i++;
 	}
-	
-	// shell is running in non interactive mode
-	// else
-	// {
-	// 	// execute commands from script
-		
-	// }
-
 	return (0);
 }
 
-void	tokenize(char *rl)
-{
-	char **tokens;
-	int i = 0;
+// void	tokenize(char *rl)
+// {
+// 	char **tokens;
+// 	int i = 0;
 
-	tokens = ft_split(rl, ' ');
-	while (tokens[i])
-	{
-		ft_printf("%s\n", tokens[i]);
-		i++;
-	}
-}
+// 	tokens = ft_split(rl, ' ');
+// 	while (tokens[i])
+// 	{
+// 		ft_printf("%s\n", tokens[i]);
+// 		i++;
+// 	}
+// }

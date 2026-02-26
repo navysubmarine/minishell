@@ -53,3 +53,6 @@ Git for collaborative work : [Structurez la collaboration grace a Gitflow](https
 # Environment variables
 
 Youtube video : [How to use Shell Environment Variables](https://www.youtube.com/watch?v=9ZpL8iDU7LY&list=PLGU1kcPKHMKj5yA0RPb5AK4QAhexmQwrW&index=8).
+
+# AI Utilization
+We used AI to help us make checklists of everything we had to do in order to get the project done, and suggestions on how to divide evenly the different parts between the two of us. 
