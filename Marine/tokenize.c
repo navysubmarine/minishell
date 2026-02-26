@@ -25,8 +25,3 @@ void    ft_echo(char *rl)
     }
     write (1, "\n", 1);
 }
-
-void    ft_cat(char *rl)
-{
-    
-}

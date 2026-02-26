@@ -69,12 +69,10 @@ int	ft_putnbr_base_u(unsigned int nbr, char *base)
 	count_bytes = 0;
 	n = (unsigned long)nbr;
 	base_len = ft_strlen(base);
-	if (n < 0)
-	{
-		ft_putchar_pf('-');
-		n = -n;
-		count_bytes++;
-	}
+
+	ft_putchar_pf('-');
+	n = -n;
+	count_bytes++;
 	if (n >= base_len)
 	{
 		count_bytes += ft_putnbr_base_u((n / base_len), base);

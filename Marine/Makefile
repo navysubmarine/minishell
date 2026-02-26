@@ -4,7 +4,7 @@ NAME    = minishell
 
 INCLUDE_DIRS = -Iincludes -Iincludes/ft_printf -Iincludes/libft
 
-SOURCES = minishell.c cmd.c
+SOURCES = minishell.c tokenize.c
 
 OBJETS  = $(SOURCES:.c=.o)
 

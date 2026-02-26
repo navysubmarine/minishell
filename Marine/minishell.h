@@ -25,9 +25,10 @@
 # include <sys/types.h>
 # include <dirent.h>
 # include <sys/stat.h>
-# include "ft_printf.h"
-# include "libft.h"
+# include "includes/ft_printf/ft_printf.h"
+# include "includes/libft/libft.h"
 
 void    ft_echo(char *rl);
+void	tokenize(char *rl);
 
 #endif

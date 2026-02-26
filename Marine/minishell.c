@@ -25,8 +25,9 @@ int	main(void)
 		// accept input from user and execute commands
 		getcwd(cwd, sizeof(cwd));
 		rl = readline(cwd);
-		ft_printf("%s\n", rl);
-		ft_echo(rl);
+		tokenize(rl);
+		//ft_printf("%s\n", rl);
+		//ft_echo(rl);
 		rl_clear_history();
 		i++;
 	}
@@ -39,4 +40,17 @@ int	main(void)
 	// }
 
 	return (0);
+}
+
+void	tokenize(char *rl)
+{
+	char **tokens;
+	int i = 0;
+
+	tokens = ft_split(rl, ' ');
+	while (tokens[i])
+	{
+		ft_printf("%s\n", tokens[i]);
+		i++;
+	}
 }

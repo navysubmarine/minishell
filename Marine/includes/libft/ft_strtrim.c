@@ -79,11 +79,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 {
 	char			*new;
 	int				i;
-	int				j;
 	unsigned long	size_new;
 
 	i = 0;
-	j = 0;
 	size_new = 1 + calcul_size(s1, trim_start(s1, set), trim_end(s1, set));
 	new = ft_calloc(size_new, sizeof(char));
 	if (!new)

@@ -39,12 +39,10 @@ static int	signe(const char *str)
 long	ft_atoi(const char *nptr)
 {
 	int		i;
-	int		j;
 	long	reliquat;
 	long	resultat;
 
 	i = 0;
-	j = 0;
 	reliquat = 0;
 	resultat = 0;
 	while ((nptr[i] >= 9 && nptr[i] <= 13) || nptr[i] == 32)
