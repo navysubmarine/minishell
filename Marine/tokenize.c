@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 10:55:59 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 11:56:41 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	is_whitespace(char c)
 
 static int	is_operator_char(char c)
 {
-	return (c == '|' || c == '>' || c == '<' || c == '&');
+	return (c == '|' || c == '>' || c == '<');
 }
 
 static int	is_quote(char c)
@@ -32,8 +32,6 @@ static t_token_type	get_operator_type(const char *str, int *len)
 	*len = 1;
 	if (str[0] == '|')
 	{
-		if (str[1] == '|')
-			return (*len = 2, TOKEN_OR);
 		return (TOKEN_PIPE);
 	}
 	if (str[0] == '>')
@@ -48,19 +46,25 @@ static t_token_type	get_operator_type(const char *str, int *len)
 			return (*len = 2, TOKEN_HEREDOC);
 		return (TOKEN_REDIRECT_IN);
 	}
-	if (str[0] == '&')
-	{
-		if (str[1] == '&')
-			return (*len = 2, TOKEN_AND);
-	}
-	return (TOKEN_WORD);
+	return (TOKEN_UNKNOWN);
+}
+
+static void	print_env_var(char *str, int len)
+{
+	char	*var;
+	char	*tmp;
+
+	tmp = str;
+	tmp[len] = '\0';
+	var = getenv(tmp);
+	printf("%s", var);
 }
 
 static t_token_type	get_quote_type(const char *str, int *len)
 {
-	char *final;
+	char	*final;
+
 	*len = 1;
-	
 	if (str[0] == 39)
 	{
 		if (ft_strchr(str, 39))
@@ -69,26 +73,18 @@ static t_token_type	get_quote_type(const char *str, int *len)
 			*len = (final - str) - 1;
 		}
 	}
-    if (str[0] == 34)
+	if (str[0] == 34)
 	{
-		if (ft_strchr(str, 34))
+		if (ft_strchr(str[1], 34))
 		{
-			if (ft_strchr(str, '$'))
-			{
-				//todo : que faire quand on trouve un $ ? afficher le contenu ?
-				//il faudra compter le nb de char du contenu de la variable et pas ceux
-				//de son nom
-			}
-			final = ft_strchr(str, 39);
+			final = ft_strchr(str, 34);
 			*len = (final - str) - 1;
 		}
-		//todo: search for the other single quote - if found, interpret everything in between as string\
-		//besides $
 	}
 	return (TOKEN_WORD);
 }
 
-static char	*extract_word(const char *str, int *start, int *end)
+static char	*extract_normal_word(const char *str, int *start, int *end)
 {
 	int		i;
 	char	*word;
@@ -98,6 +94,35 @@ static char	*extract_word(const char *str, int *start, int *end)
 		i++;
 	word = ft_substr(str, *start, i - *start);
 	*end = i;
+	return (word);
+}
+
+static char	*extract_quoted_word(const char *str, int *start, int *end)
+{
+	int		i;
+	char	*word;
+	char	*dol_sign;
+	int 	len;
+
+	i = *start;
+	len = 0;
+	while (str[i] != 34 && str[i] != 39)
+	{
+		if (ft_strchr(str, '$') && ft_strchr(str, '$') < ft_strchr(str[1], 34))
+		{
+			dol_sign = ft_strchr(str, '$');
+			len = dol_sign;
+			while ((str[len] > 64 && str[len] < 91) || str[len] == '_')
+			{
+				len++;
+			}
+			print_env_var(str, len);
+		}
+		while (str[i])
+			i++;
+		word = ft_substr(str, *start, i - *start);
+		*end = i;
+	}
 	return (word);
 }
 
@@ -168,10 +193,6 @@ void	token_print(t_token *list)
 			type_str = "APPEND";
 		else if (list->type == TOKEN_HEREDOC)
 			type_str = "HEREDOC";
-		// else if (list->type == TOKEN_SINGLEQUOTE)
-		// 	type_str = "SINGLEQUOTE";
-		// else if (list->type == TOKEN_DOUBLEQUOTE)
-		// 	type_str = "DOUBLEQUOTE";
 		else if (list->type == TOKEN_AND)
 			type_str = "AND";
 		else if (list->type == TOKEN_OR)
@@ -185,11 +206,11 @@ void	token_print(t_token *list)
 
 t_token	*tokenize(char *input)
 {
-	t_token	*list;
-	int		i;
-	int		op_len;
-	char	*word;
-	t_token_type type;
+	t_token			*list;
+	int				i;
+	int				op_len;
+	char			*word;
+	t_token_type	type;
 
 	list = NULL;
 	i = 0;
@@ -206,23 +227,21 @@ t_token	*tokenize(char *input)
 		{
 			type = get_operator_type(&input[i], &op_len);
 			word = ft_substr(input, i, op_len);
-			token_add_back(&list, 
-				token_new(word, type));
+			token_add_back(&list, token_new(word, type));
 			free(word);
 			i += op_len;
 		}
 		if (is_quote(input[i]))
 		{
 			type = get_quote_type(&input[i], &op_len);
-			word = extract_word(input, &i, &op_len);
-			token_add_back(&list, 
-				token_new(word, type));
+			word = extract_quoted_word(input, &i, &op_len);
+			token_add_back(&list, token_new(word, type));
 			free(word);
 			i += op_len;
 		}
 		else
 		{
-			word = extract_word(input, &i, &i);
+			word = extract_normal_word(input, &i, &i);
 			if (word && ft_strlen(word) > 0)
 				token_add_back(&list, token_new(word, TOKEN_WORD));
 			free(word);
