@@ -6,7 +6,7 @@
 /*   By: gcamara <gcamara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 14:03:43 by gcamara           #+#    #+#             */
-/*   Updated: 2026/02/03 19:54:48 by gcamara          ###   ########.fr       */
+/*   Updated: 2026/02/25 13:21:01 by gcamara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "libft.h"
+# include <readline/history.h>
+# include <readline/readline.h>
 
 void	child_read(int *fd, char *cmd2, char *file2, char **envp);
 void	child_write(int *fd, char *file1, char *cmd1, char **envp);
