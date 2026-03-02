@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 17:11:11 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/03 12:08:05 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 10:12:11 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strchr(const char *s, int c)
 		i++;
 	if (s[i] == (char)c)
 		return ((char *)(s + i));
-	return (0);
+	return (NULL);
 }
 /*
 int main()

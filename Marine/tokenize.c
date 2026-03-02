@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/26 10:00:00 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 10:55:59 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ static int	is_whitespace(char c)
 
 static int	is_operator_char(char c)
 {
-	return (c == '|' || c == '>' || c == '<' || c == '&' || c == ';');
+	return (c == '|' || c == '>' || c == '<' || c == '&');
+}
+
+static int	is_quote(char c)
+{
+	return (c == 39 || c == 34);
 }
 
 static t_token_type	get_operator_type(const char *str, int *len)
@@ -48,12 +53,38 @@ static t_token_type	get_operator_type(const char *str, int *len)
 		if (str[1] == '&')
 			return (*len = 2, TOKEN_AND);
 	}
+	return (TOKEN_WORD);
+}
+
+static t_token_type	get_quote_type(const char *str, int *len)
+{
+	char *final;
+	*len = 1;
+	
 	if (str[0] == 39)
-		return (TOKEN_SINGLEQUOTE);
-    //todo : bloquer les meta-characters dans les quotes
+	{
+		if (ft_strchr(str, 39))
+		{
+			final = ft_strchr(str, 39);
+			*len = (final - str) - 1;
+		}
+	}
     if (str[0] == 34)
-        return (TOKEN_DOUBLEQUOTE);
-    //todo : bloquer les meta-characters dans les double quotes, sauf $
+	{
+		if (ft_strchr(str, 34))
+		{
+			if (ft_strchr(str, '$'))
+			{
+				//todo : que faire quand on trouve un $ ? afficher le contenu ?
+				//il faudra compter le nb de char du contenu de la variable et pas ceux
+				//de son nom
+			}
+			final = ft_strchr(str, 39);
+			*len = (final - str) - 1;
+		}
+		//todo: search for the other single quote - if found, interpret everything in between as string\
+		//besides $
+	}
 	return (TOKEN_WORD);
 }
 
@@ -137,10 +168,10 @@ void	token_print(t_token *list)
 			type_str = "APPEND";
 		else if (list->type == TOKEN_HEREDOC)
 			type_str = "HEREDOC";
-		else if (list->type == TOKEN_SINGLEQUOTE)
-			type_str = "SINGLEQUOTE";
-		else if (list->type == TOKEN_DOUBLEQUOTE)
-			type_str = "DOUBLEQUOTE";
+		// else if (list->type == TOKEN_SINGLEQUOTE)
+		// 	type_str = "SINGLEQUOTE";
+		// else if (list->type == TOKEN_DOUBLEQUOTE)
+		// 	type_str = "DOUBLEQUOTE";
 		else if (list->type == TOKEN_AND)
 			type_str = "AND";
 		else if (list->type == TOKEN_OR)
@@ -158,6 +189,7 @@ t_token	*tokenize(char *input)
 	int		i;
 	int		op_len;
 	char	*word;
+	t_token_type type;
 
 	list = NULL;
 	i = 0;
@@ -172,10 +204,19 @@ t_token	*tokenize(char *input)
 		}
 		if (is_operator_char(input[i]))
 		{
-			get_operator_type(&input[i], &op_len);
+			type = get_operator_type(&input[i], &op_len);
 			word = ft_substr(input, i, op_len);
 			token_add_back(&list, 
-				token_new(word, get_operator_type(&input[i], &op_len)));
+				token_new(word, type));
+			free(word);
+			i += op_len;
+		}
+		if (is_quote(input[i]))
+		{
+			type = get_quote_type(&input[i], &op_len);
+			word = extract_word(input, &i, &op_len);
+			token_add_back(&list, 
+				token_new(word, type));
 			free(word);
 			i += op_len;
 		}
