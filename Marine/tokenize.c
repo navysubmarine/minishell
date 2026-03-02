@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 11:56:41 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:35:47 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,29 +62,31 @@ static void	print_env_var(char *str, int len)
 
 static t_token_type	get_quote_type(const char *str, int *len)
 {
-	char	*final;
-
-	*len = 1;
 	if (str[0] == 39)
 	{
-		if (ft_strchr(str, 39))
+		if (ft_strchr(str + 1, 39))
 		{
-			final = ft_strchr(str, 39);
-			*len = (final - str) - 1;
+			final = ft_strchr(str + 1, 39);
+			*len = final - str;
 		}
+		else
+			*len++;
 	}
 	if (str[0] == 34)
 	{
-		if (ft_strchr(str[1], 34))
+		if (ft_strchr(str + 1, 34))
 		{
-			final = ft_strchr(str, 34);
-			*len = (final - str) - 1;
+			final = ft_strchr(str + 1, 34);
+			*len = final - str;
 		}
+		else
+			*len++;
 	}
+	
 	return (TOKEN_WORD);
 }
 
-static char	*extract_normal_word(const char *str, int *start, int *end)
+static char	*extract_normal_word(const char *str, int *start)
 {
 	int		i;
 	char	*word;
@@ -93,7 +95,6 @@ static char	*extract_normal_word(const char *str, int *start, int *end)
 	while (str[i] && !is_whitespace(str[i]) && !is_operator_char(str[i]))
 		i++;
 	word = ft_substr(str, *start, i - *start);
-	*end = i;
 	return (word);
 }
 
@@ -193,10 +194,6 @@ void	token_print(t_token *list)
 			type_str = "APPEND";
 		else if (list->type == TOKEN_HEREDOC)
 			type_str = "HEREDOC";
-		else if (list->type == TOKEN_AND)
-			type_str = "AND";
-		else if (list->type == TOKEN_OR)
-			type_str = "OR";
 		else
 			type_str = "UNKNOWN";
 		ft_printf("[%s] %s\n", type_str, list->value);
@@ -223,7 +220,7 @@ t_token	*tokenize(char *input)
 			i++;
 			continue ;
 		}
-		if (is_operator_char(input[i]))
+		else if (is_operator_char(input[i]))
 		{
 			type = get_operator_type(&input[i], &op_len);
 			word = ft_substr(input, i, op_len);
@@ -231,17 +228,9 @@ t_token	*tokenize(char *input)
 			free(word);
 			i += op_len;
 		}
-		if (is_quote(input[i]))
-		{
-			type = get_quote_type(&input[i], &op_len);
-			word = extract_quoted_word(input, &i, &op_len);
-			token_add_back(&list, token_new(word, type));
-			free(word);
-			i += op_len;
-		}
 		else
 		{
-			word = extract_normal_word(input, &i, &i);
+			word = extract_normal_word(input, &i);
 			if (word && ft_strlen(word) > 0)
 				token_add_back(&list, token_new(word, TOKEN_WORD));
 			free(word);

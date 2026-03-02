@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 11:56:19 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 14:07:50 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ typedef enum s_token_type
 	TOKEN_REDIRECT_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_SINGLEQUOTE,
-	TOKEN_DOUBLEQUOTE,
 	TOKEN_OR,
-	TOKEN_LPAREN,
-	TOKEN_RPAREN,
 	TOKEN_UNKNOWN
 }					t_token_type;
 
@@ -51,8 +47,29 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef enum s_state
+{
+	STATE_NORMAL_OUT_WORD,
+	STATE_NORMAL_IN_WORD,
+	STATE_IN_SINGLE_QUOTE,
+	STATE_IN_DOUBLE_QUOTE,
+}					t_state;
+
+typedef struct s_global
+{
+	char			*input;
+	t_state			state;
+	int				i;
+	int				word_start;
+	t_token			*list;
+	t_token			*current_token;
+	
+
+}
+
 // void    echo(char *rl);
-t_token				*tokenize(char *input);
+t_token *
+tokenize(char *input);
 t_token				*token_new(char *value, t_token_type type);
 void				token_add_back(t_token **list, t_token *new);
 void				token_clear(t_token **list);
