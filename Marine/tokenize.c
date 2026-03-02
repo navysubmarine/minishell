@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 13:35:47 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 16:07:50 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,39 @@ static int	is_operator_char(char c)
 	return (c == '|' || c == '>' || c == '<');
 }
 
-static int	is_quote(char c)
+static int	is_single_quote(char c)
 {
-	return (c == 39 || c == 34);
+	return (c == 39);
 }
 
-static t_token_type	get_operator_type(const char *str, int *len)
+static int	is_double_quote(char c)
 {
-	*len = 1;
-	if (str[0] == '|')
+	return (c == 34);
+}
+
+static t_token_type	get_operator_type(t_global *g)
+{
+	g->current_token->len = 1;
+	if (g->current_token->value[0] == '|')
 	{
 		return (TOKEN_PIPE);
 	}
-	if (str[0] == '>')
+	if (g->current_token->value[0] == '>')
 	{
-		if (str[1] == '>')
-			return (*len = 2, TOKEN_APPEND);
+		if (g->current_token->value[1] == '>')
+		{
+			g->current_token->len = 2;
+			return (TOKEN_APPEND);
+		}
 		return (TOKEN_REDIRECT_OUT);
 	}
-	if (str[0] == '<')
+	if (g->current_token->value[0] == '<')
 	{
-		if (str[1] == '<')
-			return (*len = 2, TOKEN_HEREDOC);
+		if (g->current_token->value[1] == '<')
+		{
+			g->current_token->len = 2;
+			return (TOKEN_HEREDOC);
+		}
 		return (TOKEN_REDIRECT_IN);
 	}
 	return (TOKEN_UNKNOWN);
@@ -82,7 +93,6 @@ static t_token_type	get_quote_type(const char *str, int *len)
 		else
 			*len++;
 	}
-	
 	return (TOKEN_WORD);
 }
 
@@ -103,7 +113,7 @@ static char	*extract_quoted_word(const char *str, int *start, int *end)
 	int		i;
 	char	*word;
 	char	*dol_sign;
-	int 	len;
+	int		len;
 
 	i = *start;
 	len = 0;
@@ -201,40 +211,119 @@ void	token_print(t_token *list)
 	}
 }
 
-t_token	*tokenize(char *input)
+void	init_token_op(t_global *g)
 {
-	t_token			*list;
-	int				i;
-	int				op_len;
-	char			*word;
-	t_token_type	type;
-
-	list = NULL;
-	i = 0;
-	if (!input)
-		return (NULL);
-	while (input[i])
+	g->current = &(g->input[g->i]);
+	g->current->type = get_operator_type(&g);
+	if (g->current->type == TOKEN_UNKNOWN)
 	{
-		if (is_whitespace(input[i]))
+		printf("Error : unknown token\n");
+		// todo: free all
+		exit(1);
+	}
+	g->current->value = ft_substr(g->input, g->i, g->current->len);
+	token_add_back(g->list, token_new(g->current->value, g->current->type));
+	g->i += g->current->len;
+}
+
+void	tokenize(t_global *g)
+{
+	t_token	*list;
+	char	buffer[MAX_LEN];
+	int		i_buf;
+
+	i_buf = 0;
+	list = NULL;
+	g->i = 0;
+	g->state = NORMAL_OUT_WORD;
+	g->list = list;
+	g->current = list;
+	if (!g->input)
+	{
+		printf("Error : invalid input");
+		// todo : free all
+		exit(1);
+	}
+	while (g->input[g->i])
+	{
+		if (is_whitespace(g->input[g->i]))
 		{
-			i++;
-			continue ;
+			if (g->state == NORMAL_IN_WORD)
+			{
+				if (ft_strlen(buffer) > 0)
+					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
+				buffer[0] = '\0';
+				i_buf = 0;
+				g->state = NORMAL_OUT_WORD;
+			}
+			g->i++;
 		}
-		else if (is_operator_char(input[i]))
+		else if (is_operator_char(g->input[g->i]))
 		{
-			type = get_operator_type(&input[i], &op_len);
-			word = ft_substr(input, i, op_len);
-			token_add_back(&list, token_new(word, type));
-			free(word);
-			i += op_len;
+			if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
+			{
+				g->i++;
+			}
+			else
+				init_token_op(&g);
+		}
+		else if (is_single_quote(g->input[g->i]))
+		{
+			if (g->state == IN_SINGLE_QUOTE)
+			{
+				g->state = NORMAL_OUT_WORD;
+				if (ft_strlen(buffer) > 0)
+					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
+				buffer[0] = '\0';
+				i_buf = 0;
+				g->i++;
+			}
+			else if (g->state == IN_DOUBLE_QUOTE)
+			{
+				buffer[i_buf++] = g->input[g->i];
+				g->i++;
+			}
+			else
+			{
+				g->state = IN_SINGLE_QUOTE;
+				g->i++;
+			}
+		}
+		else if (is_double_quote(g->input[g->i]))
+		{
+			if (g->state == IN_DOUBLE_QUOTE)
+			{
+				g->state = NORMAL_OUT_WORD;
+				if (ft_strlen(buffer) > 0)
+					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
+				buffer[0] = '\0';
+				i_buf = 0;
+				g->i++;
+			}
+			else if (g->state == IN_DOUBLE_QUOTE)
+			{
+				buffer[i_buf++] = g->input[g->i];
+				g->i++;
+			}
+			else
+			{
+				g->state = IN_DOUBLE_QUOTE;
+				g->i++;
+			}
 		}
 		else
 		{
-			word = extract_normal_word(input, &i);
-			if (word && ft_strlen(word) > 0)
-				token_add_back(&list, token_new(word, TOKEN_WORD));
-			free(word);
+			if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
+			{
+				g->i++;
+			}
+			else
+			{
+				g->current->value = extract_normal_word(g->input, g->i);
+				if (g->current->value && ft_strlen(g->current->value) > 0)
+					token_add_back(g->list, token_new(g->current->value,
+							TOKEN_WORD));
+			}
 		}
 	}
-	return (list);
 }

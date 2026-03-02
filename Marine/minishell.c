@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/02/25 15:22:18 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 14:20:45 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	main(void)
 {
-	char	*cwd;
-	char	*rl;
-	t_token	*tokens;
-	int		i;
+	char		*cwd;
+	char		*rl;
+	t_global	g;
+	int			i;
 
 	i = 0;
 	while (i < 10)
@@ -28,36 +28,23 @@ int	main(void)
 			ft_printf("Error: getcwd failed\n");
 			return (1);
 		}
-		rl = readline(cwd);
+		g.input = readline(cwd);
 		free(cwd);
-		if (!rl)
+		if (!g.input)
 		{
 			ft_printf("Error : readline failed\n");
 			return (1);
 		}
-		tokens = tokenize(rl);
-		if (tokens)
+		tokenize(&g);
+		if (g.list)
 		{
 			ft_printf("Tokens:\n");
-			token_print(tokens);
-			token_clear(&tokens);
+			token_print(g.list);
+			token_clear(&g.list);
 		}
-		free(rl);
+		free(g.input);
 		rl_clear_history();
 		i++;
 	}
 	return (0);
 }
-
-// void	tokenize(char *rl)
-// {
-// 	char **tokens;
-// 	int i = 0;
-
-// 	tokens = ft_split(rl, ' ');
-// 	while (tokens[i])
-// 	{
-// 		ft_printf("%s\n", tokens[i]);
-// 		i++;
-// 	}
-// }
