@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 16:07:50 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:46:25 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,25 @@ static int	is_double_quote(char c)
 
 static t_token_type	get_operator_type(t_global *g)
 {
-	g->current_token->len = 1;
-	if (g->current_token->value[0] == '|')
+	g->current->len = 1;
+	if (g->current->value[0] == '|')
 	{
 		return (TOKEN_PIPE);
 	}
-	if (g->current_token->value[0] == '>')
+	if (g->current->value[0] == '>')
 	{
-		if (g->current_token->value[1] == '>')
+		if (g->current->value[1] == '>')
 		{
-			g->current_token->len = 2;
+			g->current->len = 2;
 			return (TOKEN_APPEND);
 		}
 		return (TOKEN_REDIRECT_OUT);
 	}
-	if (g->current_token->value[0] == '<')
+	if (g->current->value[0] == '<')
 	{
-		if (g->current_token->value[1] == '<')
+		if (g->current->value[1] == '<')
 		{
-			g->current_token->len = 2;
+			g->current->len = 2;
 			return (TOKEN_HEREDOC);
 		}
 		return (TOKEN_REDIRECT_IN);
@@ -233,11 +233,12 @@ void	tokenize(t_global *g)
 	int		i_buf;
 
 	i_buf = 0;
+	buffer[0] = '\0';
 	list = NULL;
 	g->i = 0;
 	g->state = NORMAL_OUT_WORD;
 	g->list = list;
-	g->current = list;
+	g->current = NULL;
 	if (!g->input)
 	{
 		printf("Error : invalid input");
@@ -250,80 +251,64 @@ void	tokenize(t_global *g)
 		{
 			if (g->state == NORMAL_IN_WORD)
 			{
-				if (ft_strlen(buffer) > 0)
+				if (i_buf > 0)
+				{
+					buffer[i_buf] = '\0';
 					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
-				buffer[0] = '\0';
-				i_buf = 0;
+					i_buf = 0;
+					buffer[0] = '\0';
+				}
 				g->state = NORMAL_OUT_WORD;
 			}
 			g->i++;
 		}
-		else if (is_operator_char(g->input[g->i]))
+		else if (is_operator_char(g->input[g->i]) && g->state != IN_SINGLE_QUOTE
+			&& g->state != IN_DOUBLE_QUOTE)
 		{
-			if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
+			if (i_buf > 0)
 			{
-				g->i++;
+				buffer[i_buf] = '\0';
+				token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
+				i_buf = 0;
+				buffer[0] = '\0';
 			}
-			else
-				init_token_op(&g);
+			init_token_op(&g);
 		}
 		else if (is_single_quote(g->input[g->i]))
 		{
 			if (g->state == IN_SINGLE_QUOTE)
 			{
-				g->state = NORMAL_OUT_WORD;
-				if (ft_strlen(buffer) > 0)
-					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
-				buffer[0] = '\0';
-				i_buf = 0;
-				g->i++;
-			}
-			else if (g->state == IN_DOUBLE_QUOTE)
-			{
-				buffer[i_buf++] = g->input[g->i];
-				g->i++;
-			}
-			else
-			{
-				g->state = IN_SINGLE_QUOTE;
+				if (g->state == IN_SINGLE_QUOTE)
+					g->state = NORMAL_IN_WORD;
+				else if (g->state == NORMAL_OUT_WORD)
+					g->state = IN_SINGLE_QUOTE;
+				else if (g->state == IN_DOUBLE_QUOTE)
+					buffer[i_buf++] = g->input[g->i];
 				g->i++;
 			}
 		}
 		else if (is_double_quote(g->input[g->i]))
 		{
 			if (g->state == IN_DOUBLE_QUOTE)
-			{
-				g->state = NORMAL_OUT_WORD;
-				if (ft_strlen(buffer) > 0)
-					token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
-				buffer[0] = '\0';
-				i_buf = 0;
-				g->i++;
-			}
-			else if (g->state == IN_DOUBLE_QUOTE)
-			{
-				buffer[i_buf++] = g->input[g->i];
-				g->i++;
-			}
-			else
-			{
+				g->state = NORMAL_IN_WORD;
+			else if (g->state == NORMAL_OUT_WORD)
 				g->state = IN_DOUBLE_QUOTE;
-				g->i++;
-			}
+			else if (g->state == IN_SINGLE_QUOTE)
+				buffer[i_buf++] = g->input[g->i];
+			g->i++;
 		}
 		else
 		{
-			if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
-			{
-				g->i++;
-			}
-			else
-			{
-				g->current->value = extract_normal_word(g->input, g->i);
-				if (g->current->value && ft_strlen(g->current->value) > 0)
-					token_add_back(g->list, token_new(g->current->value,
-							TOKEN_WORD));
-			}
+			if (g->state == NORMAL_OUT_WORD)
+				g->state = NORMAL_IN_WORD;
+			if (i_buf < MAX_LEN - 1)
+				buffer[i_buf++] = g->input[g->i];
+			g->i++;
 		}
+	}
+	if (i_buf > 0)
+	{
+		buffer[i_buf] = '\0';
+		token_add_back(&g->list, token_new(buffer, TOKEN_WORD));
 	}
 }
