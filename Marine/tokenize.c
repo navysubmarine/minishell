@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 19:16:28 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/02 19:21:18 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,27 @@ static int	is_double_quote(char c)
 	return (c == 34);
 }
 
-static t_token_type	get_operator_type(t_global *g)
+static t_token_type	get_operator_type(const char *str, int *len)
 {
-	g->current->len = 1;
-	if (g->current->value[0] == '|')
-	{
+	*len = 1;
+
+	if (str[0] == '|')
 		return (TOKEN_PIPE);
-	}
-	if (g->current->value[0] == '>')
+
+	if (str[0] == '>')
 	{
-		if (g->current->value[1] == '>')
+		if (str[1] == '>')
 		{
-			g->current->len = 2;
+			*len = 2;
 			return (TOKEN_APPEND);
 		}
 		return (TOKEN_REDIRECT_OUT);
 	}
-	if (g->current->value[0] == '<')
+	if (str[0] == '<')
 	{
-		if (g->current->value[1] == '<')
+		if (str[1] == '<')
 		{
-			g->current->len = 2;
+			*len = 2;
 			return (TOKEN_HEREDOC);
 		}
 		return (TOKEN_REDIRECT_IN);
@@ -214,17 +214,19 @@ void	token_print(t_token *list)
 void	init_token_op(t_global *g)
 {
 	t_token_type	token;
+	int				len;
+	char			*value;
 
-	token = get_operator_type(g);
+	token = get_operator_type(&g->input[g->i], &len);
 	if (token == TOKEN_UNKNOWN)
 	{
 		printf("Error : unknown token\n");
-		// todo: free all
 		exit(1);
 	}
-	g->current->value = ft_substr(g->input, g->i, g->current->len);
-	token_add_back(&g->list, token_new(g->current->value, token));
-	g->i += g->current->len;
+	value = ft_substr(g->input, g->i, len);
+	token_add_back(&g->list, token_new(value, token));
+	free(value);
+	g->i += len;
 }
 
 void	tokenize(t_global *g)
