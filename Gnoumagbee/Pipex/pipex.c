@@ -6,7 +6,7 @@
 /*   By: gcamara <gcamara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 11:40:59 by gcamara           #+#    #+#             */
-/*   Updated: 2026/03/03 14:52:48 by gcamara          ###   ########.fr       */
+/*   Updated: 2026/03/03 18:40:17 by gcamara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	child_write(int *fd, char *file1, char *cmd1, char **envp)
 	close(infile);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
+	/*if (ft_strncmp(file1, "here_doc", ft_strlen(file1)) == 0)
+		unlink(file1);*/
 	ft_create_args(cmd1, envp);
 }
 
@@ -81,22 +83,23 @@ int	check_argc_pipex(int argc, int *fd)
 	return (0);
 }
 
-void close_pipe(int cmd, int *fd)
+void close_pipe(int cmd, int fd[cmd][2])
 {
 	int i;
 
 	i = 0;
-	while((cmd - 1) <= i)
+	while(i < cmd)
 	{
-		close((*fd)[i][0]);
-		close((*fd)[i][1]);
+		close(fd[i][0]);
+		close(fd[i][1]);
 		i++;
 	}
 }
 
-void here_doc_in(int here_doc, char *file, char *limiter) 
+void here_doc_in(char *file, char *limiter) 
 {
 	char *r;
+	int here_doc;
 	here_doc = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	while(1)
 	{
@@ -109,9 +112,9 @@ void here_doc_in(int here_doc, char *file, char *limiter)
 				break;
 			write(here_doc, r, ft_strlen(r));
 			write(here_doc, "\n", 1);
-		}			
+		}
 	}
-			close(here_doc);
+	close(here_doc);
 }
 
 //TODO: count numbers of arguments
@@ -120,44 +123,11 @@ void here_doc_in(int here_doc, char *file, char *limiter)
 //TODO: child process
 int	main(int argc, char **argv, char **envp)
 {
-	int	fd[2];
-	int	pid_1;
-	int	pid_2;
 	int	status;
-	char *r = NULL;
 	status = 0;
-	if (check_argc_pipex(argc, fd))
-		return (1);
-	pid_1 = fork();
-	if (pid_1 < 0)
-		perror_fork();
-	if (pid_1 == 0)
-	{
-		int here_doc;
-		if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
-		{			
-			/*here_doc = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			while(1)
-			{
-				r = readline("Here_doc> ");
-				if (r == NULL)
-					break;
-				if (r != NULL)
-				{
-					if(ft_strncmp(r, argv[2], ft_strlen(argv[2])) == 0)
-						break;
-					write(here_doc, r, ft_strlen(r));
-					write(here_doc, "\n", 1);
-				}			
-			}
-			close(here_doc);
-			//unlink("./here_doc");*/
-			here_doc_in(here_doc, argv[1], argv[2]); 
-			child_write(fd, argv[1], argv[3], envp);
-		}else{
-			child_write(fd, argv[1], argv[2], envp);
-		}
-	}
+	/*if (check_argc_pipex(argc, fd))
+		return (1);*/
+	
 	/* prev fd pour le here doc
 	boucle 
 	pipe curent pipe
@@ -168,64 +138,54 @@ int	main(int argc, char **argv, char **envp)
 	dup2(prevfd, 0)
 	dup2 (currpipe[1], 1)
 	*/
-	int prev_fd;
-	int curr_fd[2];
-	int pid[cmd];
+	int prev_fd = 0;
 	int cmd = (argc - 1) - 1;
+	int curr_fd[cmd][2];
+	int pid[cmd];
 	int i = 0;
-	prev_fd;
-	int here_doc;
 	while (i < cmd)
 	{
-		if (pipe(curr_fd) == -1)
+		if (pipe(curr_fd[i]) == -1)
 		{
 			perror("Error: Pipe failed");
 			exit(1);
 		}
 		pid[i] = fork();
-		if (pid[0])
+		if (pid[i] < 0)
+			perror_fork();
+		if (pid[0] == 0)
 		{
 			if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
 			{
-				here_doc_in(&here_doc, argv[1], argv[2]); 
-				child_write(fd, argv[1], argv[3], envp);
+				here_doc_in(argv[1], argv[2]); 
+				child_write(curr_fd[i], argv[1], argv[3], envp);
 			}else{
-				child_write(fd, argv[1], argv[2], envp);
+				child_write(curr_fd[i], argv[1], argv[2], envp);
 			}
 		}
-		
-		if (pid[i] < 0)
-			perror_fork();
-		prev_fd = curr_fd[0];
-		dup2(prev_fd, 0);
-		dup2(curr_fd[1], 1);
-		close(curr_fd[1]);
-		close_pipe(i, fd);
+		if (pid[1] == 0)
+		{
+			child_read(curr_fd[i], argv[argc - 2], argv[argc - 1], envp);
+		}
+		else if(pid[i] == 0)
+		{
+			dup2(prev_fd, 0);
+			dup2(curr_fd[i][1], 1);
+			close(curr_fd[i][1]);
+			close_pipe(i, curr_fd);
+			ft_create_args(argv[i + 1], envp);
+		}
+		close(prev_fd);
+		prev_fd = curr_fd[i][0];
 		i++;
 	}
-	
-	while(pid[i] <= (argc - 1) - 1)
+	i = 0;
+	while(i <= cmd)
 	{
-		pid[i] = fork();
-		if (pid[i] < 0)
-			perror_fork();
+		waitpid(pid[i], &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
 		i++;
 	}
-	/*while(pid[i] <= 0)
-	{
-		wait(NULL);
-	}*/
-
-	pid_2 = fork();
-	if (pid_2 < 0)
-		perror_fork();
-	if (pid_2 == 0)
-		child_read(fd, argv[4], argv[5], envp);
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(pid_1, &status, 0);
-	waitpid(pid_2, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
 	return (1);
 }

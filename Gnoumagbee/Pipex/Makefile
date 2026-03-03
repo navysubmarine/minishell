@@ -4,7 +4,7 @@ AR = ar rcs
 LIBFT_DIR = ./Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFLAGS = -Wall -Wextra -Werror -I. -I $(LIBFT_DIR)
+CFLAGS = -Wall -Wextra -Werror -g -I. -I $(LIBFT_DIR)
 
 SRCS = $(C_FILES)
 
