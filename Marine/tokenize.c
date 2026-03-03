@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 19:21:18 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 15:46:04 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ static int	is_whitespace(char c)
 static int	is_operator_char(char c)
 {
 	return (c == '|' || c == '>' || c == '<');
+}
+
+static int	is_dollar_sign(char c)
+{
+	return (c == '$');
 }
 
 static int	is_single_quote(char c)
@@ -204,6 +209,8 @@ void	token_print(t_token *list)
 			type_str = "APPEND";
 		else if (list->type == TOKEN_HEREDOC)
 			type_str = "HEREDOC";
+		else if (list->type == TOKEN_ENV_VARIABLE)
+			type_str = "ENV VARIABLE";
 		else
 			type_str = "UNKNOWN";
 		ft_printf("[%s] %s\n", type_str, list->value);
@@ -286,9 +293,9 @@ void	tokenize(t_global *g)
 		{
 			if (g->state == IN_SINGLE_QUOTE)
 				g->state = NORMAL_IN_WORD;
-			else if (g->state == NORMAL_OUT_WORD)
+			else if (g->state == NORMAL_OUT_WORD || g->state == NORMAL_IN_WORD)
 				g->state = IN_SINGLE_QUOTE;
-			else if (g->state == IN_DOUBLE_QUOTE)
+			if (g->state != IN_DOUBLE_QUOTE)
 				buffer[i_buf++] = g->input[g->i];
 			g->i++;
 		}
@@ -296,9 +303,9 @@ void	tokenize(t_global *g)
 		{
 			if (g->state == IN_DOUBLE_QUOTE)
 				g->state = NORMAL_IN_WORD;
-			else if (g->state == NORMAL_OUT_WORD)
+			else if (g->state == NORMAL_OUT_WORD || g->state == NORMAL_IN_WORD)
 				g->state = IN_DOUBLE_QUOTE;
-			else if (g->state == IN_SINGLE_QUOTE)
+			if (g->state != IN_DOUBLE_QUOTE)
 				buffer[i_buf++] = g->input[g->i];
 			g->i++;
 		}
