@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 16:41:19 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 18:17:25 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,14 @@ int					is_whitespace(char c);
 int					is_operator_char(char c);
 int					is_single_quote(char c);
 int					is_double_quote(char c);
+/*PARSING - TOKENIZATION : HANDLE EACH TYPE OF CHAR*/
+void				handle_whitespace(t_global *g, char *buffer, int *i_buf);
+void				handle_operator(t_global *g, char *buffer, int *i_buf);
+void				handle_single_quote(t_global *g, char *buffer, int *i_buf);
+void				handle_double_quote(t_global *g, char *buffer, int *i_buf);
+void				handle_regular_char(t_global *g, char *buffer, int *i_buf);
+t_token_type		get_operator_type(const char *str, int *len, t_global *g);
+void				flush_word(t_global *g, char *buffer, int *i_buf);
+void				process_char(t_global *g, char *buffer, int *i_buf);
 
 #endif
