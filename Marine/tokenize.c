@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 15:46:04 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 16:08:05 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ static int	is_operator_char(char c)
 	return (c == '|' || c == '>' || c == '<');
 }
 
-static int	is_dollar_sign(char c)
-{
-	return (c == '$');
-}
-
 static int	is_single_quote(char c)
 {
 	return (c == 39);
@@ -37,13 +32,16 @@ static int	is_double_quote(char c)
 	return (c == 34);
 }
 
-static t_token_type	get_operator_type(const char *str, int *len)
+static t_token_type	get_operator_type(const char *str, int *len, t_global *g)
 {
 	*len = 1;
 
 	if (str[0] == '|')
+	{
+		g->nbr_pipes++;
+		printf("nbr_pipes = %d\n", g->nbr_pipes);
 		return (TOKEN_PIPE);
-
+	}
 	if (str[0] == '>')
 	{
 		if (str[1] == '>')
@@ -65,42 +63,6 @@ static t_token_type	get_operator_type(const char *str, int *len)
 	return (TOKEN_UNKNOWN);
 }
 
-// static void	print_env_var(char *str, int len)
-// {
-// 	char	*var;
-// 	char	*tmp;
-
-// 	tmp = str;
-// 	tmp[len] = '\0';
-// 	var = getenv(tmp);
-// 	printf("%s", var);
-// }
-
-// static t_token_type	get_quote_type(const char *str, int *len)
-// {
-// 	if (str[0] == 39)
-// 	{
-// 		if (ft_strchr(str + 1, 39))
-// 		{
-// 			final = ft_strchr(str + 1, 39);
-// 			*len = final - str;
-// 		}
-// 		else
-// 			*len++;
-// 	}
-// 	if (str[0] == 34)
-// 	{
-// 		if (ft_strchr(str + 1, 34))
-// 		{
-// 			final = ft_strchr(str + 1, 34);
-// 			*len = final - str;
-// 		}
-// 		else
-// 			*len++;
-// 	}
-// 	return (TOKEN_WORD);
-// }
-
 // static char	*extract_normal_word(const char *str, int *start)
 // {
 // 	int		i;
@@ -113,35 +75,6 @@ static t_token_type	get_operator_type(const char *str, int *len)
 // 	return (word);
 // }
 
-// static char	*extract_quoted_word(const char *str, int *start, int *end)
-// {
-// 	int		i;
-// 	char	*word;
-// 	char	*dol_sign;
-// 	int		len;
-
-// 	i = *start;
-// 	len = 0;
-// 	while (str[i] != 34 && str[i] != 39)
-// 	{
-// 		if (ft_strchr(str, '$') && ft_strchr(str, '$') < ft_strchr(str[1], 34))
-// 		{
-// 			dol_sign = ft_strchr(str, '$');
-// 			len = dol_sign;
-// 			while ((str[len] > 64 && str[len] < 91) || str[len] == '_')
-// 			{
-// 				len++;
-// 			}
-// 			print_env_var(str, len);
-// 		}
-// 		while (str[i])
-// 			i++;
-// 		word = ft_substr(str, *start, i - *start);
-// 		*end = i;
-// 	}
-// 	return (word);
-// }
-
 t_token	*token_new(char *value, t_token_type type)
 {
 	t_token	*new;
@@ -149,6 +82,7 @@ t_token	*token_new(char *value, t_token_type type)
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
+	memset(new, 0, sizeof(t_token));
 	new->value = ft_strdup(value);
 	if (!new->value)
 	{
@@ -209,9 +143,7 @@ void	token_print(t_token *list)
 			type_str = "APPEND";
 		else if (list->type == TOKEN_HEREDOC)
 			type_str = "HEREDOC";
-		else if (list->type == TOKEN_ENV_VARIABLE)
-			type_str = "ENV VARIABLE";
-		else
+		else if (list->type == TOKEN_UNKNOWN)
 			type_str = "UNKNOWN";
 		ft_printf("[%s] %s\n", type_str, list->value);
 		list = list->next;
@@ -224,7 +156,7 @@ void	init_token_op(t_global *g)
 	int				len;
 	char			*value;
 
-	token = get_operator_type(&g->input[g->i], &len);
+	token = get_operator_type(&g->input[g->i], &len, g);
 	if (token == TOKEN_UNKNOWN)
 	{
 		printf("Error : unknown token\n");

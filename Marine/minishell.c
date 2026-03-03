@@ -6,11 +6,19 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/02 18:49:20 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 16:00:44 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	init_global_struct(t_global *g)
+{
+	if (!g)
+		return ;
+	memset(g, 0, sizeof(t_global));
+	g->state = NORMAL_OUT_WORD;
+}
 
 int	main(void)
 {
@@ -19,6 +27,7 @@ int	main(void)
 	int			i;
 
 	i = 0;
+	init_global_struct(&g);
 	while (i < 10)
 	{
 		cwd = getcwd(NULL, 0);

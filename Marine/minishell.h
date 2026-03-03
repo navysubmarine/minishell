@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 15:31:52 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 16:01:32 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,14 @@ typedef enum s_token_type
 	TOKEN_REDIRECT_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_ENV_VARIABLE,
 	TOKEN_UNKNOWN
 }					t_token_type;
-
-typedef enum s_quote_type
-{
-	NONE,
-	SINGLE,
-	DOUBLE
-}					t_quote_type;
 
 typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
 	// int				i_start;
-	t_quote_type	quote_type;
 	int				len;
 	struct s_token	*next;
 }					t_token;
@@ -78,6 +69,7 @@ typedef struct s_global
 	int				word_start;
 	t_token			*list;
 	t_token			*current;
+	int				nbr_pipes;
 }					t_global;
 
 void				tokenize(t_global *g);
