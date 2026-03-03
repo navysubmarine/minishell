@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 16:01:32 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/03 16:41:19 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,21 @@ typedef struct s_global
 	t_state			state;
 	int				i;
 	int				word_start;
-	t_token			*list;
+	t_token			*tok_list;
 	t_token			*current;
 	int				nbr_pipes;
 }					t_global;
-
+/*PARSING - TOKENIZATION OF THE INPUT*/
 void				tokenize(t_global *g);
+void				init_token(t_global *g);
 t_token				*token_new(char *value, t_token_type type);
 void				token_add_back(t_token **list, t_token *new);
 void				token_clear(t_token **list);
 void				token_print(t_token *list);
+/*PARSING - TOKENIZATION UTILS : CHAR CARACTERIZATION*/
+int					is_whitespace(char c);
+int					is_operator_char(char c);
+int					is_single_quote(char c);
+int					is_double_quote(char c);
 
 #endif
