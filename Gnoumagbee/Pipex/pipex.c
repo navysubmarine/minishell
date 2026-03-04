@@ -6,7 +6,7 @@
 /*   By: gcamara <gcamara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 11:40:59 by gcamara           #+#    #+#             */
-/*   Updated: 2026/03/03 18:40:17 by gcamara          ###   ########.fr       */
+/*   Updated: 2026/03/04 17:50:19 by gcamara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,42 +30,38 @@ char	*ft_strjoin_char(char const *s1, char const *s2, char *s)
 	return (copy);
 }
 
-void	child_read(int *fd, char *cmd2, char *file2, char **envp)
+void	child_read(int *fd, char *file2)
 {
-	int	outfile;
+	//int	outfile;
 
-	close(fd[1]);
-	outfile = open(file2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (outfile < 0)
+	//close(fd[1]);
+	*fd = open(file2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
 	{
-		close(fd[0]);
+		//close(fd[0]);
 		perror_file();
 	}
-	dup2(outfile, STDOUT_FILENO);
-	close(outfile);
+	/*dup2(outfile, STDOUT_FILENO);
+	//close(outfile);
 	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	ft_create_args(cmd2, envp);
+	close(fd[0]);*/
+	//ft_create_args(cmd2, envp);
 }
 
-void	child_write(int *fd, char *file1, char *cmd1, char **envp)
+void	child_write(int *fd, char *file1)
 {
-	int	infile;
 
-	close(fd[0]);
-	infile = open (file1, O_RDONLY);
-	if (infile < 0)
+	*fd = open (file1, O_RDONLY);
+	if (fd < 0)
 	{
-		close(fd[1]);
 		perror_file();
 	}
-	dup2(infile, STDIN_FILENO);
-	close(infile);
+	/*dup2(infile, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	/*if (ft_strncmp(file1, "here_doc", ft_strlen(file1)) == 0)
+	if (ft_strncmp(file1, "here_doc", ft_strlen(file1)) == 0)
 		unlink(file1);*/
-	ft_create_args(cmd1, envp);
+	//ft_create_args(cmd1, envp);
 }
 
 int	check_argc_pipex(int argc, int *fd)
@@ -125,6 +121,14 @@ int	main(int argc, char **argv, char **envp)
 {
 	int	status;
 	status = 0;
+	//int fd[2];
+		
+	int prev_fd;
+	int fd;
+	int cmd = (argc - 1) - 3;
+	int curr_fd[cmd][2];
+	int pid[cmd];
+	int i = 0;
 	/*if (check_argc_pipex(argc, fd))
 		return (1);*/
 	
@@ -138,49 +142,54 @@ int	main(int argc, char **argv, char **envp)
 	dup2(prevfd, 0)
 	dup2 (currpipe[1], 1)
 	*/
-	int prev_fd = 0;
-	int cmd = (argc - 1) - 1;
-	int curr_fd[cmd][2];
-	int pid[cmd];
-	int i = 0;
+	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+	{
+		here_doc_in(argv[1], argv[2]); 
+		child_write(&prev_fd, argv[1]);
+	}else{
+		child_write(&prev_fd, argv[1]);
+	}
 	while (i < cmd)
 	{
-		if (pipe(curr_fd[i]) == -1)
+		dup2(prev_fd, 0);
+		close(prev_fd);
+		if (i < cmd)
 		{
-			perror("Error: Pipe failed");
-			exit(1);
+			if (pipe(curr_fd[i]) == -1)
+			{
+				perror("Error: Pipe failed");
+				exit(1);
+			}
 		}
 		pid[i] = fork();
 		if (pid[i] < 0)
 			perror_fork();
-		if (pid[0] == 0)
-		{
-			if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+		if (pid[i] == 0){
+			if (i == (cmd - 1))
 			{
-				here_doc_in(argv[1], argv[2]); 
-				child_write(curr_fd[i], argv[1], argv[3], envp);
-			}else{
-				child_write(curr_fd[i], argv[1], argv[2], envp);
+				child_read(&fd, argv[argc - 1]);
+				dup2(fd, 1);
+				close(fd);
+				//close(curr_fd[i][0]);
 			}
+			else
+			{
+				dup2(curr_fd[i][1], 1);
+				close(curr_fd[i][1]);
+				close(curr_fd[i][0]);
+				//printf("cmd %d\n", i);
+				close_pipe(i, curr_fd);
+			}
+			ft_create_args(argv[i + 3], envp);
 		}
-		if (pid[1] == 0)
-		{
-			child_read(curr_fd[i], argv[argc - 2], argv[argc - 1], envp);
-		}
-		else if(pid[i] == 0)
-		{
-			dup2(prev_fd, 0);
-			dup2(curr_fd[i][1], 1);
-			close(curr_fd[i][1]);
-			close_pipe(i, curr_fd);
-			ft_create_args(argv[i + 1], envp);
-		}
-		close(prev_fd);
-		prev_fd = curr_fd[i][0];
+		//close(prev_fd);
+		if (i < cmd - 1)
+			prev_fd = curr_fd[i][0];
+		close(curr_fd[i][1]);
 		i++;
 	}
 	i = 0;
-	while(i <= cmd)
+	while(i < cmd)
 	{
 		waitpid(pid[i], &status, 0);
 		if (WIFEXITED(status))

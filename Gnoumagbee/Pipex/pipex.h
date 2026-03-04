@@ -6,7 +6,7 @@
 /*   By: gcamara <gcamara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 14:03:43 by gcamara           #+#    #+#             */
-/*   Updated: 2026/02/25 13:21:01 by gcamara          ###   ########.fr       */
+/*   Updated: 2026/03/04 15:00:11 by gcamara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-void	child_read(int *fd, char *cmd2, char *file2, char **envp);
-void	child_write(int *fd, char *file1, char *cmd1, char **envp);
+void	child_read(int *fd, char *file2);
+void	child_write(int *fd, char *file1);
 char	*search_path(char **envp, char *variable);
 char	*ft_strjoin_char(char const *s1, char const *s2, char *s);
 void	ft_create_args(char *cmd, char **envp);
