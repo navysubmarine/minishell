@@ -1,23 +1,19 @@
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -g3
-NAME    = so_long
+NAME    = minishell
 
-SRC_DIR = src
-INCLUDE_DIRS = -Iincludes -Ift_printf/includes -Ilibft/includes -Imlx_linux/minilibx-linux
+INCLUDE_DIRS = -Iincludes -Iincludes/ft_printf -Iincludes/libft
 
-SOURCES = main.c \
-          get_next_line.c check_map1.c \
-		  check_map2.c check_map3.c  check_map4.c \
-          map_utils.c init_map.c exit.c \
-          move.c render.c init_game.c load_sprites.c
+SOURCES = minishell.c lexer/tokenize.c lexer/token_list_utils.c \
+lexer/char_caracterizer.c lexer/handle_char.c
 
 OBJETS  = $(SOURCES:.c=.o)
 
-FTPRINTF = ft_printf/libftprintf.a
-LIBFT    = libft/libft.a
+FTPRINTF_DIR = includes/ft_printf
+LIBFT_DIR    = includes/libft
 
-MLX_DIR = mlx_linux/minilibx-linux
-MLX_LIB = -L$(MLX_DIR) -lmlx_Linux -lX11 -lXext -lm -lz
+FTPRINTF = includes/ft_printf/libftprintf.a
+LIBFT    = includes/libft/libft.a
 
 .PHONY: all clean fclean re
 
@@ -25,33 +21,30 @@ all: $(NAME)
 
 $(NAME): $(OBJETS) $(FTPRINTF) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJETS) \
-	-Llibft -lft \
-	-Lft_printf -lftprintf \
-	$(MLX_LIB) \
+	-L$(FTPRINTF_DIR) -lftprintf \
+	-L$(LIBFT_DIR) -lft \
+	-lreadline \
 	-o $(NAME)
 
-
-%.o: $(SRC_DIR)/%.c
+%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
 
-
 $(FTPRINTF):
-	@$(MAKE) -C ft_printf
+	@$(MAKE) -C $(FTPRINTF_DIR)
 
 $(LIBFT):
-	@$(MAKE) -C libft
-
+	@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-	@$(MAKE) clean -C ft_printf
-	@$(MAKE) clean -C libft
+	@$(MAKE) clean -C $(FTPRINTF_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 	rm -f $(OBJETS)
 
 good: all clean
 
 fclean: clean
-	@$(MAKE) fclean -C ft_printf
-	@$(MAKE) fclean -C libft
+	@$(MAKE) fclean -C $(FTPRINTF_DIR)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
 	rm -f $(NAME)
 
 re: fclean all
