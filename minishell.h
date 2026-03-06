@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 17:29:51 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:53:09 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@
 /*pour le parser*/
 typedef struct s_cmd
 {
-	char			*args;
+	char			**args;
 	t_token_type	sep;
+	t_cmd			*next;
 }					t_cmd;
 
 /*pour le lexer*/
@@ -77,7 +78,9 @@ typedef struct s_global
 	t_token			*tok_list;
 	t_token			*current;
 	int				nbr_pipes;
+	t_cmd			*cmd_list;
 }					t_global;
+
 /*PARSING - TOKENIZATION OF THE INPUT*/
 void				tokenize(t_global *g);
 void				init_token(t_global *g);
