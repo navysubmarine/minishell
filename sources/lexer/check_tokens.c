@@ -6,17 +6,11 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 14:57:35 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 16:01:53 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 16:08:54 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*todo : lexer (Marine): verifier la syntaxe, detecter si elle est valide
-mais necessite d'etre completee. L'input ne doit pas commencer
-par un separateur - les separateurs doivent etre bien places, pas
-deux a la suite, les quotes doivent etre fermees et les redirections
-ont un fichier cible*/
 
 int	is_redirect(t_token_type type)
 {
