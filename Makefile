@@ -5,7 +5,7 @@ NAME    = minishell
 INCLUDE_DIRS = -Iincludes -Iincludes/ft_printf -Iincludes/libft
 
 SOURCES = minishell.c sources/lexer/tokenize.c sources/lexer/token_list_utils.c \
-	sources/lexer/char_caracterizer.c sources/lexer/handle_char.c
+	sources/lexer/char_caracterizer.c sources/lexer/handle_char.c sources/lexer/check_tokens.c
 
 OBJETS  = $(SOURCES:.c=.o)
 
