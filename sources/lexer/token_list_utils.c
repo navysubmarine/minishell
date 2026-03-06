@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   token_list_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 16:34:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 16:39:47 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:25:59 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_token(t_global *g)
 	char			*value;
 
 	token = get_operator_type(&g->input[g->i], &len, g);
-	if (token == TOKEN_UNKNOWN)
+	if (token == UNKNOWN)
 	{
 		printf("Error : unknown token\n");
 		exit(1);
@@ -86,19 +86,19 @@ void	token_print(t_token *tok_list)
 
 	while (tok_list)
 	{
-		if (tok_list->type == TOKEN_WORD)
+		if (tok_list->type == WORD)
 			type_str = "WORD";
-		else if (tok_list->type == TOKEN_PIPE)
+		else if (tok_list->type == PIPE)
 			type_str = "PIPE";
-		else if (tok_list->type == TOKEN_REDIRECT_IN)
+		else if (tok_list->type == REDIRECT_IN)
 			type_str = "REDIRECT_IN";
-		else if (tok_list->type == TOKEN_REDIRECT_OUT)
+		else if (tok_list->type == REDIRECT_OUT)
 			type_str = "REDIRECT_OUT";
-		else if (tok_list->type == TOKEN_APPEND)
+		else if (tok_list->type == APPEND)
 			type_str = "APPEND";
-		else if (tok_list->type == TOKEN_HEREDOC)
+		else if (tok_list->type == HEREDOC)
 			type_str = "HEREDOC";
-		else if (tok_list->type == TOKEN_UNKNOWN)
+		else if (tok_list->type == UNKNOWN)
 			type_str = "UNKNOWN";
 		ft_printf("[%s] %s\n", type_str, tok_list->value);
 		tok_list = tok_list->next;

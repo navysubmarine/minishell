@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 14:36:27 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 16:04:52 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,27 @@ static void	init_global_struct(t_global *g)
 	g->state = NORMAL_OUT_WORD;
 }
 
-static void	print_banner(void)
-{
-	printf("\n");
-	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n");
-	printf("███╗   ███╗██╗███╗   ██╗██╗██╗  ██╗███████╗██╗     ██╗     \n");
-	printf("████╗ ████║██║████╗  ██║██║██║  ██║██╔════╝██║     ██║     \n");
-	printf("██╔████╔██║██║██╔██╗ ██║██║███████║█████╗  ██║     ██║     \n");
-	printf("██║╚██╔╝██║██║██║╚██╗██║██║██╔══██║██╔══╝  ██║     ██║     \n");
-	printf("██║ ╚═╝ ██║██║██║ ╚████║██║██║  ██║███████╗███████╗███████╗\n");
-	printf("╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
-	printf("\n");
-	printf("        	♥ Welcome to Minihell ♥\n");
-	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n\n");
-}
+// static void	print_banner(void)
+// {
+// 	printf("\n");
+// 	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n");
+// 	printf("███╗   ███╗██╗███╗   ██╗██╗██╗  ██╗███████╗██╗     ██╗     \n");
+// 	printf("████╗ ████║██║████╗  ██║██║██║  ██║██╔════╝██║     ██║     \n");
+// 	printf("██╔████╔██║██║██╔██╗ ██║██║███████║█████╗  ██║     ██║     \n");
+// 	printf("██║╚██╔╝██║██║██║╚██╗██║██║██╔══██║██╔══╝  ██║     ██║     \n");
+// 	printf("██║ ╚═╝ ██║██║██║ ╚████║██║██║  ██║███████╗███████╗███████╗\n");
+// 	printf("╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+// 	printf("\n");
+// 	printf("        	♥ Welcome to Minihell ♥\n");
+// 	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n\n");
+// }
 
 int	main(void)
 {
 	// char		*cwd;
 	t_global	g;
 
-	print_banner();
+	//print_banner();
 	while (1)
 	{
 		init_global_struct(&g);
@@ -56,9 +56,11 @@ int	main(void)
 		if (!g.input)
 		{
 			ft_printf("Error : readline failed\n");
-			return (1);
+			continue ;
 		}
 		tokenize(&g);
+		if (!check_tokens(g.tok_list))
+			continue ;	
 		if (g.tok_list)
 		{
 			ft_printf("Tokens:\n");
