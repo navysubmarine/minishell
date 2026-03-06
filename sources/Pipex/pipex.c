@@ -6,7 +6,7 @@
 /*   By: gcamara <gcamara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 11:40:59 by gcamara           #+#    #+#             */
-/*   Updated: 2026/03/04 17:50:19 by gcamara          ###   ########.fr       */
+/*   Updated: 2026/03/05 12:03:12 by gcamara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	child_read(int *fd, char *file2)
 
 	//close(fd[1]);
 	*fd = open(file2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
+	if (*fd < 0)
 	{
 		//close(fd[0]);
 		perror_file();
@@ -52,7 +52,9 @@ void	child_write(int *fd, char *file1)
 {
 
 	*fd = open (file1, O_RDONLY);
-	if (fd < 0)
+	if (ft_strncmp(file1, "here_doc", ft_strlen(file1)) == 0)
+		unlink (file1);
+	if (*fd < 0)
 	{
 		perror_file();
 	}
@@ -180,7 +182,10 @@ int	main(int argc, char **argv, char **envp)
 				//printf("cmd %d\n", i);
 				close_pipe(i, curr_fd);
 			}
-			ft_create_args(argv[i + 3], envp);
+			if(ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+				ft_create_args(argv[i + 3], envp);
+			else
+				ft_create_args(argv[i + 2], envp);
 		}
 		//close(prev_fd);
 		if (i < cmd - 1)
