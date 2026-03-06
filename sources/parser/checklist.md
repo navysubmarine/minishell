@@ -8,7 +8,6 @@ Le parser est la deuxième étape. Il transforme la liste linéaire de tokens en
 Le parser a quatre missions clés. Il crée les structures de commandes avec leurs arguments. Il gère tous les types de séparateurs : pipes, opérateurs and et or. Il associe correctement les redirections aux commandes. Et pour les bonus, il gère la création des subshell avec parenthèses.
 
 ## L’Algorithme de Parsing
-
 L’algorithme parcourt la liste de tokens et traite chaque type différemment.
 
 Quand il rencontre un séparateur (pipe, and, or), il définit le séparateur de la commande courante, puis crée une nouvelle commande et l’ajoute à la liste.

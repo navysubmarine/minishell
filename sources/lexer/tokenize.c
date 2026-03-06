@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 14:27:08 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:26:54 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,27 @@ t_token_type	get_operator_type(const char *str, int *len, t_global *g)
 	{
 		g->nbr_pipes++;
 		printf("nbr_pipes = %d\n", g->nbr_pipes);
-		return (TOKEN_PIPE);
+		return (PIPE);
 	}
 	if (str[0] == '>')
 	{
 		if (str[1] == '>')
 		{
 			*len = 2;
-			return (TOKEN_APPEND);
+			return (APPEND);
 		}
-		return (TOKEN_REDIRECT_OUT);
+		return (REDIRECT_OUT);
 	}
 	if (str[0] == '<')
 	{
 		if (str[1] == '<')
 		{
 			*len = 2;
-			return (TOKEN_HEREDOC);
+			return (HEREDOC);
 		}
-		return (TOKEN_REDIRECT_IN);
+		return (REDIRECT_IN);
 	}
-	return (TOKEN_UNKNOWN);
+	return (UNKNOWN);
 }
 
 void	flush_word(t_global *g, char *buffer, int *i_buf)
@@ -53,7 +53,7 @@ void	flush_word(t_global *g, char *buffer, int *i_buf)
 	if (*i_buf > 0)
 	{
 		buffer[*i_buf] = '\0';
-		token_add_back(&g->tok_list, token_new(buffer, TOKEN_WORD));
+		token_add_back(&g->tok_list, token_new(buffer, WORD));
 		*i_buf = 0;
 		buffer[0] = '\0';
 	}

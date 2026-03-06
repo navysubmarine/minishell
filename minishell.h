@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 16:17:58 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:29:51 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,29 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-typedef	enum	s_cmd_type
+/*pour le parser*/
+typedef struct s_cmd
 {
-	CMD_WORD,
-	
-}
+	char			*args;
+	t_token_type	sep;
+}					t_cmd;
 
-typedef	struct	s_cmd
-{
-	
-}	t_cmd;
-
+/*pour le lexer*/
 typedef enum s_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_UNKNOWN
+	WORD,
+	PIPE,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	APPEND,
+	HEREDOC,
+	UNKNOWN
 }					t_token_type;
 
 typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
-	// int				i_start;
 	int				len;
 	struct s_token	*next;
 }					t_token;

@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 14:57:35 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 16:08:54 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:25:09 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	is_redirect(t_token_type type)
 {
-	if (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT
-		|| type == TOKEN_APPEND || type == TOKEN_HEREDOC)
+	if (type == REDIRECT_IN || type == REDIRECT_OUT
+		|| type == APPEND || type == HEREDOC)
 		return (1);
 	return (0);
 }
@@ -29,7 +29,7 @@ int	check_tokens(t_token *list)
 		return (0);
 	}
 	current = list;
-	if (current->type != TOKEN_WORD)
+	if (current->type != WORD)
 	{
 		/*cas d'erreur ou l'input commence par un separateur*/
 		printf("syntax error near unexpected token `%s'\n", list->value);
@@ -37,9 +37,9 @@ int	check_tokens(t_token *list)
 	}
 	while (current)
 	{
-		if (current->type == TOKEN_PIPE)
+		if (current->type == PIPE)
 		{
-			if (!current->next || current->next->type != TOKEN_WORD)
+			if (!current->next || current->next->type != WORD)
 			{
 				/*cas d'erreur ou le pipe n'est pas suivi par un mot */
 				printf("syntax error near unexpected token `%s'\n",
@@ -49,7 +49,7 @@ int	check_tokens(t_token *list)
 		}
 		if (is_redirect(current->type))
 		{
-			if (!current->next || current->next->type != TOKEN_WORD)
+			if (!current->next || current->next->type != WORD)
 			{
 				/*cas d'erreur ou il n'y a pas de fichier vers lequel envoyer
 				la redirection. ici on verifie seulement que c'est un mot
