@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 11:48:59 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 14:36:27 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,39 @@ static void	init_global_struct(t_global *g)
 	g->state = NORMAL_OUT_WORD;
 }
 
+static void	print_banner(void)
+{
+	printf("\n");
+	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n");
+	printf("███╗   ███╗██╗███╗   ██╗██╗██╗  ██╗███████╗██╗     ██╗     \n");
+	printf("████╗ ████║██║████╗  ██║██║██║  ██║██╔════╝██║     ██║     \n");
+	printf("██╔████╔██║██║██╔██╗ ██║██║███████║█████╗  ██║     ██║     \n");
+	printf("██║╚██╔╝██║██║██║╚██╗██║██║██╔══██║██╔══╝  ██║     ██║     \n");
+	printf("██║ ╚═╝ ██║██║██║ ╚████║██║██║  ██║███████╗███████╗███████╗\n");
+	printf("╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+	printf("\n");
+	printf("        	♥ Welcome to Minihell ♥\n");
+	printf("★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★  ♥  ★\n\n");
+}
+
 int	main(void)
 {
-	char		*cwd;
+	// char		*cwd;
 	t_global	g;
 
+	print_banner();
 	while (1)
 	{
 		init_global_struct(&g);
-		cwd = getcwd(NULL, 0);
-		if (!cwd)
-		{
-			ft_printf("Error: getcwd failed\n");
-			return (1);
-		}
-		g.input = readline(cwd);
-		free(cwd);
+
+		// cwd = getcwd(NULL, 0);
+		// if (!cwd)
+		// {
+		// 	ft_printf("Error: getcwd failed\n");
+		// 	return (1);
+		// }
+		g.input = readline("★minihell★>");
+		//free(cwd);
 		if (!g.input)
 		{
 			ft_printf("Error : readline failed\n");

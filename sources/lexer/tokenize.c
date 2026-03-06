@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 12:11:59 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 14:27:08 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,5 @@ void	tokenize(t_global *g)
 		return ;
 	while (g->input[g->i])
 		process_char(g, buffer, &i_buf);
-	if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
-	{
-		printf("Error: unclosed quote\n");
-		token_clear(&g->tok_list);
-		exit(1);
-	}
 	flush_word(g, buffer, &i_buf);
 }
