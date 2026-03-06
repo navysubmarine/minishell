@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 16:16:55 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 11:48:59 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,10 @@ int	main(void)
 {
 	char		*cwd;
 	t_global	g;
-	// int			i;
 
-	// i = 0;
-	init_global_struct(&g);
-	// while (i < 10)
-	// {
+	while (1)
+	{
+		init_global_struct(&g);
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
 		{
@@ -52,7 +50,6 @@ int	main(void)
 		}
 		free(g.input);
 		rl_clear_history();
-	// 	i++;
-	// }
+	}
 	return (0);
 }

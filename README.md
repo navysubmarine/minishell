@@ -22,6 +22,8 @@ Another one (probably the most exaustive one - 800 tests pour minishell) : [here
 
 ## General 
 
+Medium : [Minishell 42 : L’Art de Créer un Shell Performant et Maintenable](https://medium.com/@gibrat.dylan/minishell-42-lart-de-cr%C3%A9er-un-shell-performant-et-maintenable-53c0aede140e).
+
 Avant qu'il ne disparaisse.. [gitbook fonctions](https://42-cursus.gitbook.io/guide/3-rank-03/minishell/functions).
 
 Medium : [Guide to code a simple shell in C](https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd).

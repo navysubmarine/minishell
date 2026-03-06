@@ -6,11 +6,17 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 10:24:05 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/03 18:16:42 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 12:11:59 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*todo : verifier la syntaxe, detecter si elle est valide
+mais necessite d'etre completee. L'input ne doit pas commencer
+par un separateur - les separateurs doivent etre bien places, pas
+deux a la suite, les quotes doivent etre fermees et les redirections
+ont un fichier cible*/
 
 t_token_type	get_operator_type(const char *str, int *len, t_global *g)
 {
@@ -87,92 +93,3 @@ void	tokenize(t_global *g)
 	}
 	flush_word(g, buffer, &i_buf);
 }
-
-// void	tokenize(t_global *g)
-// {
-// 	char	buffer[MAX_LEN];
-// 	int		i_buf;
-
-// 	i_buf = 0;
-// 	buffer[0] = '\0';
-// 	if (!g->input)
-// 	{
-// 		printf("");
-// 		// todo : free all
-// 		return ;
-// 	}
-// 	while (g->input[g->i])
-// 	{
-// 		if (is_whitespace(g->input[g->i]))
-// 		{
-// 			if (g->state == NORMAL_IN_WORD)
-// 			{
-// 				if (i_buf > 0)
-// 				{
-// 					buffer[i_buf] = '\0';
-// 					token_add_back(&g->tok_list, token_new(buffer, TOKEN_WORD));
-// 					i_buf = 0;
-// 					buffer[0] = '\0';
-// 				}
-// 				g->state = NORMAL_OUT_WORD;
-// 			}
-// 			else if (i_buf > 0 && (g->state == IN_SINGLE_QUOTE
-// 					|| g->state == IN_DOUBLE_QUOTE))
-// 			{
-// 				buffer[i_buf++] = g->input[g->i];
-// 			}
-// 			g->i++;
-// 		}
-// 		else if (is_operator_char(g->input[g->i]) && g->state != IN_SINGLE_QUOTE
-// 			&& g->state != IN_DOUBLE_QUOTE)
-// 		{
-// 			if (i_buf > 0)
-// 			{
-// 				buffer[i_buf] = '\0';
-// 				token_add_back(&g->tok_list, token_new(buffer, TOKEN_WORD));
-// 				i_buf = 0;
-// 				buffer[0] = '\0';
-// 			}
-// 			init_token(g);
-// 		}
-// 		else if (is_single_quote(g->input[g->i]))
-// 		{
-// 			if (g->state == IN_SINGLE_QUOTE)
-// 				g->state = NORMAL_IN_WORD;
-// 			else if (g->state == NORMAL_OUT_WORD || g->state == NORMAL_IN_WORD)
-// 				g->state = IN_SINGLE_QUOTE;
-// 			if (g->state == IN_DOUBLE_QUOTE)
-// 				buffer[i_buf++] = g->input[g->i];
-// 			g->i++;
-// 		}
-// 		else if (is_double_quote(g->input[g->i]))
-// 		{
-// 			if (g->state == IN_DOUBLE_QUOTE)
-// 				g->state = NORMAL_IN_WORD;
-// 			else if (g->state == NORMAL_OUT_WORD || g->state == NORMAL_IN_WORD)
-// 				g->state = IN_DOUBLE_QUOTE;
-// 			if (g->state == IN_SINGLE_QUOTE)
-// 				buffer[i_buf++] = g->input[g->i];
-// 			g->i++;
-// 		}
-// 		else
-// 		{
-// 			if (g->state == NORMAL_OUT_WORD)
-// 				g->state = NORMAL_IN_WORD;
-// 			if (i_buf < MAX_LEN - 1)
-// 				buffer[i_buf++] = g->input[g->i];
-// 			g->i++;
-// 		}
-// 	}
-// 	if (g->state == IN_SINGLE_QUOTE || g->state == IN_DOUBLE_QUOTE)
-// 	{
-// 		printf("Error: unclosed quote\n");
-// 		token_clear(&g->tok_list);
-// 		exit(1);
-// 	}
-// 	if (i_buf > 0)
-// 	{
-// 		buffer[i_buf] = '\0';
-// 		token_add_back(&g->tok_list, token_new(buffer, TOKEN_WORD));
-// 	}
-// }

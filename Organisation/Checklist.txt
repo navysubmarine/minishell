@@ -6,3 +6,15 @@
 4) Executer la commande associee au token
 
 - Faire un fichier supp avec Valgrind
+
+L’INPUT reçoit la chaîne de caractères brute.
+
+Le LEXER (tokenizer) découpe cette chaîne en tokens individuels : un mot pour “ls”, un mot pour “-la”, un symbole pipe, un mot pour “grep”, et un mot pour “test”.
+
+Le PARSER transforme cette liste de tokens en structures de commandes exploitables : une première commande contenant “ls” et “-la” avec un séparateur pipe, et une seconde commande contenant “grep” et “test” sans séparateur.
+
+L’EXPAND remplace les variables, les wildcards et les tildes par leurs valeurs réelles.
+
+Enfin, l’EXECUTION lance les processus avec fork() et execve().
+
+Le OUTPUT affiche le résultat final.
