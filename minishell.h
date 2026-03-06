@@ -6,7 +6,7 @@
 /*   By: marthoma <marthoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:11:38 by marthoma          #+#    #+#             */
-/*   Updated: 2026/03/06 15:18:26 by marthoma         ###   ########.fr       */
+/*   Updated: 2026/03/06 16:17:58 by marthoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+typedef	enum	s_cmd_type
+{
+	CMD_WORD,
+	
+}
+
+typedef	struct	s_cmd
+{
+	
+}	t_cmd;
 
 typedef enum s_token_type
 {

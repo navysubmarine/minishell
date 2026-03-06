@@ -6,7 +6,8 @@ Le parser est la deuxième étape. Il transforme la liste linéaire de tokens en
 ## Les Responsabilités du Parser
 
 Le parser a quatre missions clés. Il crée les structures de commandes avec leurs arguments. Il gère tous les types de séparateurs : pipes, opérateurs and et or. Il associe correctement les redirections aux commandes. Et pour les bonus, il gère la création des subshell avec parenthèses.
-L’Algorithme de Parsing
+
+## L’Algorithme de Parsing
 
 L’algorithme parcourt la liste de tokens et traite chaque type différemment.
 
